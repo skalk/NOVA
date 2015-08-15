@@ -210,6 +210,13 @@ void Cpu::init()
     if (EXPECT_TRUE (feature (FEAT_SMEP)))
         set_cr4 (get_cr4() | Cpu::CR4_SMEP);
 
+    uint32 cr_pat = Msr::read<uint32>(Msr::IA32_CR_PAT) & 0xffff00ff;
+
+    cr_pat |= 1 << 8;
+    Msr::write<uint32>(Msr::IA32_CR_PAT, cr_pat);
+    cr_pat = Msr::read<uint32>(Msr::IA32_CR_PAT);
+    trace(0, "PAT: %08x", cr_pat);
+
     Vmcs::init();
     Vmcb::init();
 

@@ -74,6 +74,8 @@ void Space_mem::update (Mdb *mdb, mword r)
         return;
 
     mword ord = min (o, Hpt::ord);
+    if (p >= 0xd0000000 && p < 0xe0000000)
+       a |= Hpt::HPT_PWT;
     for (unsigned long i = 0; i < 1UL << (o - ord); i++)
         hpt.update (b + i * (1UL << (ord + PAGE_BITS)), ord, p + i * (1UL << (ord + PAGE_BITS)), Hpt::hw_attr (a), r ? Hpt::TYPE_DN : Hpt::TYPE_UP);
 
